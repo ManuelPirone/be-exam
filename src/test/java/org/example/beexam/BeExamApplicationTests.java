@@ -1,0 +1,13 @@
+package org.example.beexam;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class BeExamApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
