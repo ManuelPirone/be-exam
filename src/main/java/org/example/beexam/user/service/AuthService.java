@@ -1,5 +1,6 @@
 package org.example.beexam.user.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.beexam.security.JwtService;
 import org.example.beexam.security.SecurityUser;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final CloudinaryService cloudinaryService;
 
     public AuthenticationResponse register(RegisterRequest request) {
         Role userRole = roleRepository.findByName("ROLE_MEMBER")
@@ -59,5 +62,18 @@ public class AuthService {
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
+    }
+
+    @Transactional
+    public String updateProfileImage(String userEmail, MultipartFile file) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+
+        String imageUrl = cloudinaryService.uploadImage(file);
+
+        user.setProfileImageUrl(imageUrl);
+        userRepository.save(user);
+
+        return imageUrl;
     }
 }

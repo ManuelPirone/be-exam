@@ -12,11 +12,12 @@ import org.example.beexam.book.entity.PrintedBook;
 import org.example.beexam.book.repository.AuthorRepository;
 import org.example.beexam.book.repository.BookRepository;
 import org.example.beexam.book.repository.CategoryRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,11 +28,18 @@ public class BookService {
     private final CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
-    public List<BookResponse> getAllBooks() {
-        return bookRepository.findAll()
-                .stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
+    public Page<BookResponse> getAllBooks(int page, int size, String sortBy, String title) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+
+        Page<Book> bookPage;
+
+        if (title != null && !title.isBlank()) {
+            bookPage = bookRepository.findByTitleContainingIgnoreCase(title, pageable);
+        } else {
+            bookPage = bookRepository.findAll(pageable);
+        }
+
+        return bookPage.map(this::mapToResponse);
     }
 
     @Transactional

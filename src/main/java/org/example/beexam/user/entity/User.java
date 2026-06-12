@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
@@ -33,6 +34,7 @@ public class User {
     @Column(name = "profile_image_url")
     private String profileImageUrl;
 
+    @CreationTimestamp
     @Column(name = "registration_date", nullable = false, updatable = false)
     private LocalDate registrationDate;
 
