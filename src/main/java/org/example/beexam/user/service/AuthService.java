@@ -29,8 +29,9 @@ public class AuthService {
     private final CloudinaryService cloudinaryService;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        Role userRole = roleRepository.findByName("ROLE_MEMBER")
-                .orElseThrow(() -> new RuntimeException("Ruolo MEMBER non trovato."));
+        // ruolo admin di default per testare
+        Role userRole = roleRepository.findByName("ROLE_ADMIN")
+                .orElseThrow(() -> new RuntimeException("Ruolo ADMIN non trovato."));
 
         User user = new User();
         user.setFirstName(request.getFirstName());
