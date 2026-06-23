@@ -86,7 +86,7 @@ spring:
 
 # Configurazione JWT
 jwt:
-  secret: INSERISCI_UNA_CHIAVE_SEGRETA_LUNGA_E_SICURA_DA_ALMENO_32_CARATTERI
+  secret: INSERISCI_SECRET_KEY
   expiration: 86400000
 
 # Configurazione Cloudinary
