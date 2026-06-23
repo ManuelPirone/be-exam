@@ -2,6 +2,7 @@ package org.example.beexam.book.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.beexam.book.dto.BookResponse;
+import org.example.beexam.book.dto.CategoryBookCountResponse;
 import org.example.beexam.book.dto.EBookRequest;
 import org.example.beexam.book.dto.PrintedBookRequest;
 import org.example.beexam.book.entity.Author;
@@ -18,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -92,6 +95,16 @@ public class BookService {
 
         EBook savedBook = bookRepository.save(book);
         return mapToResponse(savedBook);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategoryBookCountResponse> getBooksCountByCategory() {
+        return bookRepository.countBooksByCategory();
+    }
+
+    @Transactional(readOnly = true)
+    public long getTotalBooksCount() {
+        return bookRepository.count();
     }
 
     private BookResponse mapToResponse(Book book) {
